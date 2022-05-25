@@ -55,7 +55,7 @@ $("body").on("click",".removeclass", function(e){ //user click on remove text
 
  $('#submit').click(function(){
     $.ajax({
-
+        url: "/createTemplate",
         method:"POST",
         data:$('#add_skills').serialize(),
         success:function(data)
