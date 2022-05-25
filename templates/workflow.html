@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h2>{{ workflowName }}</h2>
+    {% for column in columns.description %}
+        Переменная {{ column[0] }} <br>
+    {% endfor %}
+{% endblock %}
