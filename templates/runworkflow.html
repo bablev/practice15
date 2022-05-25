@@ -1,3 +1,41 @@
 {% extends 'base.html' %}
+{% block style %}
+    .form-control {width:500px; padding:15px}
+
+{% endblock %}
 {% block content %}
+    <h3>Запуск workflow "{{ workflow }}"</h3>
+    <form method="post"  action="{{ url_for('runworkflow', workflow=workflow) }}">
+        {% for variable in variables.description %}
+
+            <div class="form-group">
+                <label for="{{ variable[0] }}">{{ variable[0] }}
+                    <input class="form-control innput" id="{{ variable[0] }}" aria-describedby="emailHelp" name="{{ variable[0] }}"
+                           placeholder="Введите значение переменной">
+                <button type="button"  id="trans" class="btn btn-primary btn-sm">-></button>
+                </label>
+
+            </div>
+        {% endfor %}
+    <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <form>
+        <hr>
+        <label for="email">Отправить письмо</label>
+        <input type="email" class="form-control" id="email" aria-describedby="emailHelp"
+               placeholder="Введите почту">
+        <label for="textarea">Письмо</label>
+        <textarea class="form-control" id="textarea" rows="2"></textarea>
+    </form>
+{% endblock %}
+{% block script %}
+    $(document).ready(function() {
+    $('button').click(function(event){
+    var t1 = $(this).siblings('.innput');
+    console.log(t1.attr('id'));
+    $('#textarea').val(function(i, val){
+    	return val + ' ' + '[[[' + t1.attr('id') + ']]]';
+    });
+    });
+    });
 {% endblock %}

@@ -2,8 +2,9 @@
 {% block content %}
     <h2>Список шаблонов Workflow</h2>
     {% for table in tables %}
-    <a href="{{ url_for('workflow', workflowName=table[0]) }}">
-    <h3 class="text-primary">{{ table[0] }}</h3>
-    </a>
+        <a href="{{ url_for('workflow', workflowName=table[0]) }}">
+            <h3 class="text-primary">{{ table[0] }}</h3>
+        </a>
+        <a href="{{ url_for('runworkflow', workflow = table[0]) }}" class="badge badge-primary">Запустить</a>
     {% endfor %}
 {% endblock %}

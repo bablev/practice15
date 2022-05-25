@@ -18,11 +18,41 @@ def index():
     return render_template('index.html', tables=tables)
 
 
-@app.route('/<string:workflowName>')
+@app.route('/runworkflow/<string:workflow>', methods=["POST", "GET"])
+def runworkflow(workflow):
+    if request.method == 'POST':
+        data = request.form.to_dict()
+        values = []
+        for key, value in data.items():
+            values.append(value)
+        print(values)
+        conn = get_db_connection()
+        sql_scheme = 'INSERT INTO ' + workflow + '('
+        counter = 0
+        for key in data:
+            counter += 1
+            if counter == len(data):
+                sql_scheme += key + ')'
+            else:
+                sql_scheme += key + ','
+        sql_scheme += ' VALUES('
+        for i in range(0, counter):
+            if i == counter - 1:
+                sql_scheme += '?)'
+            else:
+                sql_scheme += '?,'
+        conn.execute(sql_scheme, values)
+    conn = get_db_connection()
+    variables = conn.execute('SELECT * FROM ' + workflow)
+    return render_template('runworkflow.html', variables=variables, workflow=workflow)
+
+
+@app.route('/<string:workflowName>', methods=["POST", "GET"])
 def workflow(workflowName):
+    print(workflowName)
     conn = get_db_connection()
     column_names = conn.execute('SELECT * FROM ' + workflowName)
-    return render_template('workflow.html', workflowName = workflowName, columns=column_names)
+    return render_template('workflow.html', workflowName=workflowName, columns=column_names)
 
 
 @app.route('/createTemplate', methods=["POST", "GET"])
